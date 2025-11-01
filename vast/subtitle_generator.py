@@ -1,30 +1,32 @@
 import whisper
 from pathlib import Path
+from box import Box
 
-
-def generate_subtitle(video_path, output_dir, model_size):
+def generate_subtitle(video_path, output_dir, model_cfg):
     """
-    Generate a subtitle (.srt) file for a video using the OpenAI Whisper model.
-
-    Args:
-        video_path: Path to the video file.
-        output_dir: Directory where the subtitle file will be saved.
-        model_size: Whisper model size, e.g. 'tiny', 'small', 'medium', 'large'.
-
-    Returns:
-        The path of the generated subtitle (.srt) file.
+    Generate subtitle (.srt) file from video using OpenAI Whisper.
+    model_cfg:
+        whisper_size: model name (e.g. 'tiny', 'base', 'small', 'medium', 'large-v3')
+        language: (optional) target language (e.g. 'de', 'en', or omit for auto-detect)
     """
-    # Create the output directory if it does not exist
+
+    if isinstance(model_cfg, Box):
+        model_cfg = model_cfg.to_dict()
+
+    print(f"------------------: {model_cfg}")
+
+    whisper_size = model_cfg.get("whisper_size", "base")
+    print(f"Resolved Whisper model size: {whisper_size}")
+    language = model_cfg.get("language", None)  
+
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Load the Whisper model
-    print(f"Loading Whisper model: {model_size} ...")
-    model = whisper.load_model(model_size)
+    print(f"Loading Whisper model: {whisper_size}")
+    model = whisper.load_model(whisper_size)
 
-    print(f"Transcribing audio (model: {model_size})...")
-    result = model.transcribe(str(video_path))
+    print(f"Transcribing audio... (language={language or 'auto'})")
+    result = model.transcribe(str(video_path), language=language)
 
-    # Write the transcription results to an .srt file
     srt_path = output_dir / f"{video_path.stem}.srt"
     with open(srt_path, "w", encoding="utf-8") as f:
         write_srt(result["segments"], f)
@@ -50,11 +52,3 @@ def format_timestamp(seconds):
     seconds = (milliseconds % 60_000) // 1000
     milliseconds %= 1000
     return f"{hours:02}:{minutes:02}:{seconds:02},{milliseconds:03}"
-
-
-if __name__ == "__main__":
-    # Here we can still allow manual testing, but with an explicit argument
-    test_video = Path("data/raw_videos/test_video.mp4")
-    out_dir = Path("data/subtitles")
-    # User can manually decide model_size for test
-    generate_subtitle(test_video, out_dir, model_size="small")

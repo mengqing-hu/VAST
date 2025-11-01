@@ -65,4 +65,4 @@ def analyze_directory(image_dir, output_dir, model_name):
         caption = analyze_scene(img_path, model_name)
         out_path = output_dir / f"{img_path.stem}.txt"
         out_path.write_text(caption, encoding="utf-8")
-        print(f"{img_path.name} → {caption}")
+        # print(f"{img_path.name} → {caption}")

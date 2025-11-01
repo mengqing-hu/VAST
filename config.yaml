@@ -1,22 +1,36 @@
-# General data paths
-data:
-  base_dir: data
-  raw_videos: data/raw_videos
-  subtitles: data/subtitles
-  keyframes: data/keyframes
-  scene_descriptions: data/scene_descriptions
+# Configuration File for Video Processing Pipeline
+paths:
+  base_dir: "data"
+  raw_videos: "data/raw_videos"
+  subtitles: "data/subtitles"
+  keyframes: "data/keyframes"
+  scene_descriptions: "data/scene_descriptions"
+  text_analysis: "data/text_analysis"
 
-# Model configuration
-model:
-  whisper_size: small
-  modelname: Salesforce/blip-image-captioning-base
+# Video Download Module Configuration
+video_downloader:
+  # video_url: "https://www.youtube.com/watch?v=LwJfk1NUeg4"
+  video_url: "https://www.youtube.com/watch?v=hCSHuvDejGA"
 
-# Download settings
-download:
-  # default_url: "https://www.landtag.sachsen.de/de/mediathek-und-publikationen/videos/anhoerungsvideos/videoeinzelbeitrag/2502-1"
-  default_url: "https://www.youtube.com/watch?v=LwJfk1NUeg4"
-  # format: "bestvideo[vcodec*=avc1][ext=mp4]+bestaudio[acodec*=mp4a]/best[ext=mp4]"
+# Subtitle Generation Module Configuration
+subtitle_generator:
+  model:
+    whisper_size: "small"
+    language: "en"
 
-# Keyframe extraction
-keyframes:
+# Keyframe Extraction Module Configuration
+keyframe_extractor:
+  method: "histogram_diff"
   interval: 2.0
+  threshold: 0.45
+
+# Scene Analysis Module Configuration
+scene_analyzer:
+  model:
+    name: "Salesforce/blip-image-captioning-base"
+  max_caption_length: 40
+
+# Text Analysis Module Configuration
+text_analysis:
+  summarizer_model: "facebook/bart-large-cnn"
+  sentiment_model: "cardiffnlp/twitter-roberta-base-sentiment"
