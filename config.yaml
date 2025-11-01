@@ -1,0 +1,22 @@
+# General data paths
+data:
+  base_dir: data
+  raw_videos: data/raw_videos
+  subtitles: data/subtitles
+  keyframes: data/keyframes
+  scene_descriptions: data/scene_descriptions
+
+# Model configuration
+model:
+  whisper_size: small
+  modelname: Salesforce/blip-image-captioning-base
+
+# Download settings
+download:
+  # default_url: "https://www.landtag.sachsen.de/de/mediathek-und-publikationen/videos/anhoerungsvideos/videoeinzelbeitrag/2502-1"
+  default_url: "https://www.youtube.com/watch?v=LwJfk1NUeg4"
+  # format: "bestvideo[vcodec*=avc1][ext=mp4]+bestaudio[acodec*=mp4a]/best[ext=mp4]"
+
+# Keyframe extraction
+keyframes:
+  interval: 2.0

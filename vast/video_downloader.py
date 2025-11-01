@@ -4,8 +4,11 @@ import subprocess
 import json
 
 
-def _get_video_codec(video_path: Path) -> str:
-    """检测视频编码格式"""
+def get_video_codec(video_path):
+    """
+    Detect the video codec format using ffprobe.
+    Returns the codec name as a string, or "unknown" if detection fails.
+    """
     try:
         result = subprocess.run(
             [
@@ -26,10 +29,13 @@ def _get_video_codec(video_path: Path) -> str:
         return "unknown"
 
 
-def _convert_to_vscode_compatible(input_path: Path) -> Path:
-    """将视频转码为 VS Code 可播放格式 (H.264 + AAC)"""
+def convert_to_vscode_compatible(input_path):
+    """
+    Convert a video to a VS Code compatible format (H.264 + AAC).
+    Returns the path of the converted file.
+    """
     output_path = input_path.with_name(input_path.stem + "_vscode.mp4")
-    print(f"正在转码为 VS Code 兼容格式 (H.264 + AAC)...")
+    print("Converting video to VS Code compatible format (H.264 + AAC)...")
     cmd = [
         "ffmpeg",
         "-y",
@@ -41,35 +47,39 @@ def _convert_to_vscode_compatible(input_path: Path) -> Path:
         str(output_path),
     ]
     subprocess.run(cmd, check=True)
-    print(f"转码完成：{output_path}")
+    print(f"Conversion complete: {output_path}")
     return output_path
 
 
-def download_video(url: str, output_dir: Path) -> Path:
+def download_video(url, output_dir):
     """
-    下载视频并确保在 VS Code 可播放（H.264 + AAC）
+    Download a video and ensure it is playable in VS Code (H.264 + AAC).
+    If the downloaded video uses a non-compatible codec, it will be re-encoded.
     """
+    # Create the output directory if it doesn't exist
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    # yt_dlp download options
     ydl_opts = {
         "outtmpl": str(output_dir / "%(title)s.%(ext)s"),
-        # 优先选择 mp4 + H.264 + AAC，避免 AV1 / VP9
+        # Prefer mp4 + H.264 + AAC to avoid AV1 / VP9 codecs
         "format": "bestvideo[vcodec*=avc1][ext=mp4]+bestaudio[acodec*=mp4a]/best[ext=mp4]",
         "merge_output_format": "mp4",
         "quiet": False,
         "noplaylist": True,
     }
 
-    print(f"正在下载视频：{url}")
+    print(f"Downloading video: {url}")
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=True)
         video_file = Path(ydl.prepare_filename(info)).with_suffix(".mp4")
 
-    codec = _get_video_codec(video_file)
-    print(f"当前视频编码：{codec}")
+    codec = get_video_codec(video_file)
+    print(f"Detected video codec: {codec}")
 
-    # 如果检测到不是 H.264，则转码
+    # Re-encode if the codec is not H.264
     if codec not in ("h264", "avc1"):
-        video_file = _convert_to_vscode_compatible(video_file)
+        video_file = convert_to_vscode_compatible(video_file)
 
-    print(f"最终文件：{video_file}")
+    print(f"Final file: {video_file}")
     return video_file
