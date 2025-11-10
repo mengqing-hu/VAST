@@ -1,14 +1,10 @@
 import whisper
+import json
 from pathlib import Path
 from box import Box
 
+
 def generate_subtitle(video_path, output_dir, model_cfg):
-    """
-    Generate subtitle (.srt) file from video using OpenAI Whisper.
-    model_cfg:
-        whisper_size: model name (e.g. 'tiny', 'base', 'small', 'medium', 'large-v3')
-        language: (optional) target language (e.g. 'de', 'en', or omit for auto-detect)
-    """
 
     if isinstance(model_cfg, Box):
         model_cfg = model_cfg.to_dict()
@@ -16,8 +12,7 @@ def generate_subtitle(video_path, output_dir, model_cfg):
     print(f"------------------: {model_cfg}")
 
     whisper_size = model_cfg.get("whisper_size", "base")
-    print(f"Resolved Whisper model size: {whisper_size}")
-    language = model_cfg.get("language", None)  
+    language = model_cfg.get("language", None)
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -30,9 +25,24 @@ def generate_subtitle(video_path, output_dir, model_cfg):
     srt_path = output_dir / f"{video_path.stem}.srt"
     with open(srt_path, "w", encoding="utf-8") as f:
         write_srt(result["segments"], f)
+    print(f"Subtitle (.srt) created: {srt_path}")
 
-    print(f"Subtitle file created: {srt_path}")
-    return srt_path
+    json_path = output_dir / f"{video_path.stem}_subtitles.json"
+    transcript_data = [
+        {
+            "id": i + 1,
+            "start": round(seg["start"], 3),
+            "end": round(seg["end"], 3),
+            "text": seg["text"].strip()
+        }
+        for i, seg in enumerate(result["segments"])
+    ]
+
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(transcript_data, f, ensure_ascii=False, indent=2)
+    print(f"Transcript (.json) created: {json_path}")
+
+    return {"srt_path": srt_path, "json_path": json_path}
 
 
 def write_srt(segments, file_obj):
