@@ -6,22 +6,25 @@ paths:
   keyframes: "data/keyframes"
   scene_descriptions: "data/scene_descriptions"
   text_analysis: "data/text_analysis"
+  sections: "data/sections"
 
 # Video Download Module Configuration
 video_downloader:
-  # video_url: "https://www.youtube.com/watch?v=LwJfk1NUeg4"
-  video_url: "https://www.youtube.com/watch?v=hCSHuvDejGA"
+  # video_url: "https://www.youtube.com/watch?v=LwJfk1NUeg4" #easy german
+  # video_url: "https://www.youtube.com/watch?v=jP8JYPveEE8" #中文辩论
+  # video_url: "https://www.youtube.com/watch?v=LXvv6CbGg8A" #english talk
+  video_url: "https://www.youtube.com/watch?v=oXjxK_X1U28" #Deutsch Debatte
 
 # Subtitle Generation Module Configuration
 subtitle_generator:
   model:
     whisper_size: "small"
-    language: "en"
+    language: "de"
 
 # Keyframe Extraction Module Configuration
 keyframe_extractor:
   method: "histogram_diff"
-  interval: 2.0
+  interval: 60  # in seconds
   threshold: 0.45
 
 # Scene Analysis Module Configuration
