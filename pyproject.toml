@@ -6,7 +6,7 @@ authors = [
     {name = "Mengqing Hu",email = "mengqinghu688@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.11,<3.15"
+requires-python = ">=3.11,<3.14"
 dependencies = [
     "ffmpeg-python (>=0.2.0,<0.3.0)",
     "openai-whisper (>=20250625,<20250626)",
@@ -18,9 +18,6 @@ dependencies = [
     "notebook (>=7.4.7,<8.0.0)",
     "ipykernel (>=7.0.1,<8.0.0)",
     "yt-dlp (>=2025.10.22,<2026.0.0)",
-    "torch (>=2.9.0,<3.0.0)",
-    "torchvision (>=0.24.0,<0.25.0)",
-    "torchaudio (>=2.9.0,<3.0.0)",
     "python-box (>=7.3.2,<8.0.0)",
     "scikit-image (>=0.25.2,<0.26.0)",
     "sentence-transformers (>=5.1.2,<6.0.0)",
@@ -29,9 +26,16 @@ dependencies = [
     "accelerate (>=1.11.0,<2.0.0)",
     "gtts (>=2.5.4,<3.0.0)",
     "matplotlib (>=3.10.7,<4.0.0)",
-    "protobuf (>=4.25.3,<5.0.0)",
     "numpy (>=2.2.0,<3.0.0)",
-    "opencv-python (>=4.12.0,<5.0.0)"
+    "opencv-python (>=4.12.0,<5.0.0)",
+    "scenedetect (>=0.6.7.1,<0.7.0.0)",
+    "imagehash (>=4.3.2,<5.0.0)",
+    "openai-clip (>=1.0.1,<2.0.0)",
+    "pytesseract (>=0.3.13,<0.4.0)",
+    "torch (==2.8.0)",
+    "torchvision (==0.23.0)",
+    "torchaudio (==2.8.0)",
+    "pyannote-audio (==4.0.3)"
 ]
 
 
