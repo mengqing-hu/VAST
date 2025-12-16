@@ -2,6 +2,7 @@
 paths:
   base_dir: "data"
   raw_videos: "data/raw_videos"
+  raw_audios: "data/raw_audios"
   subtitles: "data/subtitles"
   keyframes: "data/keyframes"
   scene_descriptions: "data/scene_descriptions"
@@ -13,8 +14,8 @@ video_downloader:
   # video_url: "https://www.youtube.com/watch?v=LwJfk1NUeg4" #easy german
   # video_url: "https://www.youtube.com/watch?v=jP8JYPveEE8" #中文辩论
   # video_url: "https://www.youtube.com/watch?v=LXvv6CbGg8A" #english talk
-  video_url: "https://www.youtube.com/watch?v=oXjxK_X1U28" #Deutsch Debatte
-
+  # video_url: "https://www.youtube.com/watch?v=oXjxK_X1U28" #Deutsch Debatte
+  video_url: "https://www.youtube.com/watch?v=jpgku1_n2y4"
 # Subtitle Generation Module Configuration
 subtitle_generator:
   model:
